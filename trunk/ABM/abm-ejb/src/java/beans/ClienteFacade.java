@@ -41,7 +41,7 @@ public class ClienteFacade implements ClienteFacadeLocal {
     }
 
     public List<Cliente> getListaClientes(String condicion) {
-        return em.createQuery("select c from Cliente c " + condicion + " order by c.codigo").getResultList();
+        return em.createQuery("select c from Cliente c " + condicion + " order by c.idcliente").getResultList();
     }
 
 }

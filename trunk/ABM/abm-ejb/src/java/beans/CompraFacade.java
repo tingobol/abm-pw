@@ -37,7 +37,11 @@ public class CompraFacade implements CompraFacadeLocal {
     }
 
     public List<Compra> findAll() {
-        return em.createQuery("select object(o) from Compra as o").getResultList();
+        return em.createQuery("select c from Compra as c").getResultList();
+    }
+
+    public List<Compra> getListaCompras(String condicion) {
+        return em.createQuery("select c from Compra c " + condicion + " order by c.idcompra").getResultList();
     }
 
 }
