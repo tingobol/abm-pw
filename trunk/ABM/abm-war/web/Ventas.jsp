@@ -15,15 +15,14 @@
                 <webuijsf:body id="body1" style="-rave-layout: grid">
                     <webuijsf:form id="form1">
                         <h:panelGrid id="gridPanelContent1" style="left: 0px; top: 48px; position: absolute" styleClass="panelContent">
-                            <webuijsf:table augmentTitle="false" id="table1" paginateButton="true" paginationControls="true" style="width: 450px"
-                                title="PRODUCTOS" width="450">
+                            <webuijsf:table augmentTitle="false" id="table1" paginateButton="true" paginationControls="true" style="width: 450px" title="VENTAS" width="450">
                                 <f:facet name="actionsTop">
                                     <webuijsf:panelGroup id="groupPanel1">
                                         <webuijsf:label id="lblFiltro1" text="Busqueda"/>
                                         <webuijsf:textField id="txtFiltro1"/>
                                         <webuijsf:dropDown id="dropDownFiltro1" items="#{Productos.opcionFiltro}"/>
-                                        <webuijsf:button actionExpression="#{Ventas.btnBuscar_action}" alt="Filtro" id="btnBuscar1" text="Buscar" toolTip="Filtro"/>
-                                        <webuijsf:button actionExpression="#{Ventas.botonLimpiar_action}" id="botonLimpiar1" text="Limpiar"/>
+                                        <webuijsf:button actionExpression="#{Ventas.btnBuscar_action}" alt="Filtro" id="btnBuscar" text="Buscar" toolTip="Filtro"/>
+                                        <webuijsf:button actionExpression="#{Ventas.botonLimpiar_action}" id="botonLimpiar" text="Limpiar"/>
                                     </webuijsf:panelGroup>
                                 </f:facet>
                                 <webuijsf:tableRowGroup id="tableRowGroup1" rows="5" selected="#{Productos.selectedState}"
@@ -55,15 +54,15 @@
                             <h:panelGrid columns="2" id="gridPanelForm1">
                                 <webuijsf:label id="label3" text="Cantidad  : "/>
                                 <webuijsf:textField columns="10" id="txtCantidad"/>
-                                <webuijsf:label id="label4" text="Proveedor : "/>
-                                <webuijsf:dropDown id="dropDownProveedor" items="#{Productos.listaProveedoresOption}"/>
+                                <webuijsf:label id="label4" text="Producto : "/>
+                                <webuijsf:dropDown id="dropDownProducto" items="#{Productos.listaProveedoresOption}"/>
                                 <webuijsf:label id="label5" text="Cliente : "/>
                                 <webuijsf:dropDown id="dropDownCliente" items="#{Productos.listaProveedoresOption}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="3" id="gridPanelBotones1" width="168">
-                                <webuijsf:button actionExpression="#{Ventas.btnAceptar_action}" id="btnAceptar1" text="Aceptar"/>
-                                <webuijsf:button actionExpression="#{Ventas.btnUpdate_action}" id="btnUpdate1" text="Actualizar"/>
-                                <webuijsf:button actionExpression="#{Ventas.btnCancelar_action}" id="btnCancelar1" text="Cancelar"/>
+                                <webuijsf:button actionExpression="#{Ventas.btnAceptar_action}" binding="#{Ventas.btnAceptar}" id="btnAceptar" text="Aceptar"/>
+                                <webuijsf:button actionExpression="#{Ventas.btnUpdate_action}" binding="#{Ventas.btnUpdate}" id="btnUpdate" text="Actualizar"/>
+                                <webuijsf:button actionExpression="#{Ventas.btnCancelar_action}" binding="#{Ventas.btnCancelar}" id="btnCancelar" text="Cancelar"/>
                             </h:panelGrid>
                         </h:panelGrid>
                     </webuijsf:form>

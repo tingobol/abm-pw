@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package abmwar;
 
 import beans.ClienteFacadeLocal;
@@ -32,7 +31,6 @@ import javax.faces.component.html.HtmlPanelGrid;
  * @version Created on Aug 26, 2009, 11:30:46 PM
  * @author markos
  */
-
 public class Clientes extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
@@ -162,7 +160,6 @@ public class Clientes extends AbstractPageBean {
     }
 
     // </editor-fold>
-
     /**
      * <p>Construct a new Page bean instance.</p>
      */
@@ -188,7 +185,7 @@ public class Clientes extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        
+
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -196,9 +193,9 @@ public class Clientes extends AbstractPageBean {
             _init();
         } catch (Exception e) {
             log("Clientes Initialization Failure", e);
-            throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
         }
-        
+
         // </editor-fold>
         // Perform application initialization that must complete
         // *after* managed components are initialized
@@ -240,9 +237,9 @@ public class Clientes extends AbstractPageBean {
                     if (cliente != null) {
                         txtNombre.setText(cliente.getNombre());
                         txtDireccion.setText(cliente.getDireccion());
-                        txtCi.setText(txtCi.getText().toString());
-                        txtApellido.setText(txtApellido.getText().toString());
-                        txtRuc.setText(txtRuc.getText().toString());
+                        txtCi.setText(cliente.getCi());
+                        txtApellido.setText(cliente.getApellido());
+                        txtRuc.setText(cliente.getRuc());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -364,7 +361,7 @@ public class Clientes extends AbstractPageBean {
     }
 
     public String btnUpdate_action() {
-        
+
         btnBuscar_action();
         RowKey rowKey = tableRowGroup.getRowKey();
         cliente = listaClientes.get(Integer.parseInt(rowKey.getRowId()));
@@ -387,16 +384,15 @@ public class Clientes extends AbstractPageBean {
     public String btnCancelar_action() {
         return null;
     }
-
     private boolean inserting = false;
     private boolean updating = false;
     private boolean viewForm = false;
-
     private TableRowGroup tableRowGroup = new TableRowGroup();
     private TableSelectPhaseListener tablePhaseListener =
             new TableSelectPhaseListener();
 
     public List<Cliente> getListaClientes() {
+        btnBuscar_action();
         return listaClientes;
     }
 
@@ -457,12 +453,9 @@ public class Clientes extends AbstractPageBean {
     public void setOpcionFiltro(List<Option> opcionFiltro) {
         this.opcionFiltro = opcionFiltro;
     }
-
-
     private List<Cliente> listaClientes;
     private Cliente cliente;
     @EJB
     private ClienteFacadeLocal clienteFacade;
-
 }
 

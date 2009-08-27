@@ -5,8 +5,18 @@
 
 package abmwar;
 
+import beans.VentaFacadeLocal;
+import com.sun.data.provider.RowKey;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import com.sun.webui.jsf.component.Button;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.FacesException;
+import com.sun.webui.jsf.model.Option;
+import com.sun.webui.jsf.event.TableSelectPhaseListener;
+import com.sun.webui.jsf.component.TableRowGroup;
+import entidades.Venta;
+import javax.ejb.EJB;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -29,6 +39,33 @@ public class Ventas extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
+    }
+    private Button btnAceptar = new Button();
+
+    public Button getBtnAceptar() {
+        return btnAceptar;
+    }
+
+    public void setBtnAceptar(Button b) {
+        this.btnAceptar = b;
+    }
+    private Button btnUpdate = new Button();
+
+    public Button getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public void setBtnUpdate(Button b) {
+        this.btnUpdate = b;
+    }
+    private Button btnCancelar = new Button();
+
+    public Button getBtnCancelar() {
+        return btnCancelar;
+    }
+
+    public void setBtnCancelar(Button b) {
+        this.btnCancelar = b;
     }
 
     // </editor-fold>
@@ -184,6 +221,73 @@ public class Ventas extends AbstractPageBean {
         // case name where null will return to the same page.
         return null;
     }
-    
+
+
+    private Venta venta;
+    @EJB
+    private VentaFacadeLocal ventaFacade;
+    private List<Venta> listaVentas;
+    private boolean inserting = false;
+    private boolean updating = false;
+    private boolean viewForm = false;
+    private TableRowGroup tableRowGroup = new TableRowGroup();
+    private TableSelectPhaseListener tablePhaseListener =
+            new TableSelectPhaseListener();
+
+   
+
+    public TableRowGroup getTableRowGroup() {
+        return tableRowGroup;
+    }
+
+    public void setTableRowGroup(TableRowGroup tableRowGroup) {
+        this.tableRowGroup = tableRowGroup;
+    }
+
+    public TableSelectPhaseListener getTablePhaseListener() {
+        return tablePhaseListener;
+    }
+
+    public void setTablePhaseListener(TableSelectPhaseListener tablePhaseListener) {
+        this.tablePhaseListener = tablePhaseListener;
+    }
+
+    public void setSelected(Object object) {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        if (rowKey != null) {
+            tablePhaseListener.setSelected(rowKey, object);
+        }
+    }
+
+    public Object getSelected() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return tablePhaseListener.getSelected(rowKey);
+
+    }
+
+    public Object getSelectedValue() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return (rowKey != null) ? rowKey.getRowId() : null;
+    }
+
+    public boolean getSelectedState() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return tablePhaseListener.isSelected(rowKey);
+    }
+    private List<Option> opcionFiltro;
+
+    private void cargaFiltro() {
+        opcionFiltro = new ArrayList<Option>();
+        opcionFiltro.add(new Option("0", "Codigo"));
+        opcionFiltro.add(new Option("1", "Nombre"));
+    }
+
+    public List<Option> getOpcionFiltro() {
+        return opcionFiltro;
+    }
+
+    public void setOpcionFiltro(List<Option> opcionFiltro) {
+        this.opcionFiltro = opcionFiltro;
+    }
 }
 
