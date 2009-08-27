@@ -69,7 +69,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/Productos.jsp</welcome-file>
         <welcome-file>index.jsp</welcome-file>
         </welcome-file-list>
     <error-page>

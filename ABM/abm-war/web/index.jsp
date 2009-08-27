@@ -11,9 +11,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Programacion WEB con JPA/Hibernate! Yeeeeaaaaaaa..</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Programacion WEB con JPA/Hibernate! Yeeeeaaaaaaa..</h1>
+        <ul><li><a href="faces/Productos.jsp">Productos</a></li>
+            <li><a href="faces/Proveedores.jsp">Proveedores</a></li>
+            <li><a href="faces/Clientes.jsp">Clientes</a></li>
+            <li><a href="faces/Compras.jsp">Compras</a></li>
+            <li><a href="faces/Ventas.jsp">Ventas</a></li>
+        </ul>
     </body>
 </html>
