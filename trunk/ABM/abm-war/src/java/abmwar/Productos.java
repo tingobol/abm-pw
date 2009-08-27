@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package abmwar;
 
+import beans.ProveedorFacadeLocal;
 import com.sun.data.provider.RowKey;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Button;
@@ -14,11 +14,14 @@ import com.sun.webui.jsf.component.TableRowGroup;
 import com.sun.webui.jsf.component.TextField;
 import controller.ProductoDAOLocal;
 import entidades.Producto;
+import entidades.Proveedor;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlPanelGrid;
-import javax.swing.text.html.Option;
+import com.sun.webui.jsf.model.Option;
+import com.sun.webui.jsf.event.TableSelectPhaseListener;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -31,17 +34,60 @@ import javax.swing.text.html.Option;
  * @version Created on 26-ago-2009, 6:13:31
  * @author liz
  */
-
 public class Productos extends AbstractPageBean {
 
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
-
     /**
      * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
      * This method is automatically generated, so any user-specified code inserted
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
+    }
+    private TextField txtNombre = new TextField();
+
+    public TextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(TextField tf) {
+        this.txtNombre = tf;
+    }
+    private TextField txtDescripcion = new TextField();
+
+    public TextField getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(TextField tf) {
+        this.txtDescripcion = tf;
+    }
+    private TextField txtCantidad = new TextField();
+
+    public TextField getTxtCantidad() {
+        return txtCantidad;
+    }
+
+    public void setTxtCantidad(TextField tf) {
+        this.txtCantidad = tf;
+    }
+    private TextField txtPrecio = new TextField();
+
+    public TextField getTxtPrecio() {
+        return txtPrecio;
+    }
+
+    public void setTxtPrecio(TextField tf) {
+        this.txtPrecio = tf;
+    }
+    private DropDown dropDownProveedor = new DropDown();
+
+    public DropDown getDropDownProveedor() {
+        return dropDownProveedor;
+    }
+
+    public void setDropDownProveedor(DropDown dd) {
+        this.dropDownProveedor = dd;
     }
     private TextField txtFiltro = new TextField();
 
@@ -61,7 +107,6 @@ public class Productos extends AbstractPageBean {
     public void setDropDownFiltro(DropDown dd) {
         this.dropDownFiltro = dd;
     }
-
     private com.sun.webui.jsf.component.Button botonInsertar1 = new com.sun.webui.jsf.component.Button();
 
     public com.sun.webui.jsf.component.Button getbotonInsertar1() {
@@ -71,10 +116,53 @@ public class Productos extends AbstractPageBean {
     public void setbotonInsertar1(com.sun.webui.jsf.component.Button b) {
         this.botonInsertar1 = b;
     }
+    private HtmlPanelGrid gridPanelForm = new HtmlPanelGrid();
 
+    public HtmlPanelGrid getGridPanelForm() {
+        return gridPanelForm;
+    }
+
+    public void setGridPanelForm(HtmlPanelGrid hpg) {
+        this.gridPanelForm = hpg;
+    }
+    private HtmlPanelGrid gridPanelBotones = new HtmlPanelGrid();
+
+    public HtmlPanelGrid getGridPanelBotones() {
+        return gridPanelBotones;
+    }
+
+    public void setGridPanelBotones(HtmlPanelGrid hpg) {
+        this.gridPanelBotones = hpg;
+    }
+    private Button btnAceptar = new Button();
+
+    public Button getBtnAceptar() {
+        return btnAceptar;
+    }
+
+    public void setBtnAceptar(Button b) {
+        this.btnAceptar = b;
+    }
+    private HtmlPanelGrid gridPanelDown = new HtmlPanelGrid();
+
+    public HtmlPanelGrid getGridPanelDown() {
+        return gridPanelDown;
+    }
+
+    public void setGridPanelDown(HtmlPanelGrid hpg) {
+        this.gridPanelDown = hpg;
+    }
+    private Button btnUpdate = new Button();
+
+    public Button getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public void setBtnUpdate(Button b) {
+        this.btnUpdate = b;
+    }
 
     // </editor-fold>
-
     /**
      * <p>Construct a new Page bean instance.</p>
      */
@@ -100,7 +188,7 @@ public class Productos extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        
+
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -108,9 +196,9 @@ public class Productos extends AbstractPageBean {
             _init();
         } catch (Exception e) {
             log("Productos Initialization Failure", e);
-            throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
         }
-        
+
         // </editor-fold>
         // Perform application initialization that must complete
         // *after* managed components are initialized
@@ -138,6 +226,75 @@ public class Productos extends AbstractPageBean {
      */
     @Override
     public void prerender() {
+        cargaFiltro();
+        if (viewForm) {
+            gridPanelForm.setRendered(true);
+            gridPanelBotones.setRendered(true);
+            if (updating) {
+                btnAceptar.setRendered(false);
+                
+                try {
+                    RowKey rowKey = tableRowGroup.getRowKey();
+                    getListaProductos();
+                    producto = listaProductos.get(Integer.parseInt(rowKey.getRowId()));
+                    if (producto != null) {
+                        txtCantidad.setText(producto.getCantidad().toString());
+                        txtDescripcion.setText(producto.getDescripcion());
+                        txtNombre.setText(producto.getNombre());
+                        txtPrecio.setText(producto.getPrecio());
+                        dropDownProveedor.setSelected(producto.getProveedor().getCodigo().toString());
+                        System.out.println(producto.toString());
+                        txtCantidad.setText(producto.getCantidad().toString());
+                        txtDescripcion.setText(producto.getDescripcion());
+                        txtNombre.setText(producto.getNombre());
+                        txtPrecio.setText(producto.getPrecio());
+                        dropDownProveedor.setSelected(producto.getProveedor().getCodigo().toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (inserting) {
+                btnUpdate.setRendered(false);
+            }
+        } else {
+            gridPanelForm.setRendered(false);
+            gridPanelBotones.setRendered(false);
+        }
+    }
+    private TableRowGroup tableRowGroup = new TableRowGroup();
+    private TableSelectPhaseListener tablePhaseListener =
+            new TableSelectPhaseListener();
+
+    public TableSelectPhaseListener getTablePhaseListener() {
+        return tablePhaseListener;
+    }
+
+    public void setTablePhaseListener(TableSelectPhaseListener tablePhaseListener) {
+        this.tablePhaseListener = tablePhaseListener;
+    }
+
+    public void setSelected(Object object) {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        if (rowKey != null) {
+            tablePhaseListener.setSelected(rowKey, object);
+        }
+    }
+
+    public Object getSelected() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return tablePhaseListener.getSelected(rowKey);
+
+    }
+
+    public Object getSelectedValue() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return (rowKey != null) ? rowKey.getRowId() : null;
+    }
+
+    public boolean getSelectedState() {
+        RowKey rowKey = (RowKey) getValue("#{currentRow.tableRow}");
+        return tablePhaseListener.isSelected(rowKey);
     }
 
     /**
@@ -151,7 +308,7 @@ public class Productos extends AbstractPageBean {
     @Override
     public void destroy() {
     }
-    
+
     /**
      * <p>Return a reference to the scoped data bean.</p>
      *
@@ -178,8 +335,6 @@ public class Productos extends AbstractPageBean {
     protected ApplicationBean1 getApplicationBean1() {
         return (ApplicationBean1) getBean("ApplicationBean1");
     }
-
-
     //AGREGADO
     private Label labelForbidden = new Label();
 
@@ -199,28 +354,47 @@ public class Productos extends AbstractPageBean {
     public void setGridPanelContent(HtmlPanelGrid hpg) {
         this.gridPanelContent = hpg;
     }
-
-    private List<Option> optionFiltro;
+    //private List<Option> optionFiltro;
     // Inyectamos el EJB para tener acceso a los datos
     @EJB
     private ProductoDAOLocal productoDao;
     private Producto producto; // Mantenemos una entidad para manipularla
     private List<Producto> listaProductos; // Mantenemos una lista para mostrar los datos en pantalla
+    @EJB
+    private ProveedorFacadeLocal proveedorFacade;
+    private List<Proveedor> listaProveedores;
+    private List<Option> listaProveedoresOption;
+
+    public List<Option> getListaProveedoresOption() {
+        listaProveedoresOption = new ArrayList<Option>();
+        try {
+            listaProveedores = proveedorFacade.findAll();
+            if (listaProveedores != null) {
+                for (Proveedor proveedor : listaProveedores) {
+                    listaProveedoresOption.add(new Option(proveedor.getCodigo().toString(), proveedor.getNombre()));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaProveedoresOption;
+    }
+
+    public void setListaProveedoresOption(List<Option> listaProveedoresOption) {
+        this.listaProveedoresOption = listaProveedoresOption;
+    }
+
+    public List<Proveedor> getListaProveedores() {
+        return listaProveedores;
+    }
 
     public List<Producto> getListaProductos() {
+        btnBuscar_action();
         return listaProductos;
     }
 
     public void setListaProductos(List<Producto> listaProductos) {
         this.listaProductos = listaProductos;
-    }
-
-    public List<Option> getOptionFiltro() {
-        return optionFiltro;
-    }
-
-    public void setOptionFiltro(List<Option> optionFiltro) {
-        this.optionFiltro = optionFiltro;
     }
 
     public Producto getProducto() {
@@ -229,6 +403,22 @@ public class Productos extends AbstractPageBean {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+    private List<Option> opcionFiltro;
+
+    private void cargaFiltro() {
+        opcionFiltro = new ArrayList<Option>();
+        opcionFiltro.add(new Option("0", "Codigo"));
+        opcionFiltro.add(new Option("1", "Nombre"));
+        opcionFiltro.add(new Option("2", "Descripcion"));
+    }
+
+    public List<Option> getOpcionFiltro() {
+        return opcionFiltro;
+    }
+
+    public void setOpcionFiltro(List<Option> opcionFiltro) {
+        this.opcionFiltro = opcionFiltro;
     }
 
     public String btnBuscar_action() {
@@ -251,39 +441,34 @@ public class Productos extends AbstractPageBean {
         return null;
     }
 
-     // envia al usuario a la ventana de modificacion de producto
+    // envia al usuario a la ventana de modificacion de producto
     public String botonModificar_action() {
-        String retorno = null;
-        try {
-            btnBuscar_action();
-            RowKey rowKey = tableRowGroup.getRowKey();
-            producto = listaProductos.get(Integer.parseInt(rowKey.getRowId()));
-            getSessionBean1().setProducto(producto);
-            retorno = "producto_update";
-        } catch (Exception e) {
-            //error(Messages.MODIFICACION_FALLIDA + e);
-        } finally {
-            return retorno;
-        }
+        viewForm = true;
+        updating = true;
+
+        return null;
     }
 
-    // elimina una caracteristica
+    // elimina un
     public String botonEliminar_action() {
         try {
             btnBuscar_action();
             RowKey rowKey = tableRowGroup.getRowKey();
             producto = listaProductos.get(Integer.parseInt(rowKey.getRowId()));
             productoDao.delete(producto);
-            //info(Messages.ELIMINACION_EXITOSA);
+            info("Registro eliminado con exito!");
 
         } catch (Exception e) {
-            //error(Messages.ELIMINACION_FALLIDA + e);
+            error("Error al eliminar el registro. " + e);
         }
         return null;
     }
     private Button botonInsertar = new Button();
     private Button botonModificar = new Button();
     private Button botonEliminar = new Button();
+    private Boolean viewForm = false;
+    private Boolean updating = false;
+    private Boolean inserting = false;
 
     public Button getBotonInsertar() {
         return botonInsertar;
@@ -309,8 +494,6 @@ public class Productos extends AbstractPageBean {
         this.botonModificar = botonModificar;
     }
 
-    private TableRowGroup tableRowGroup;
-
     public TableRowGroup getTableRowGroup() {
         return tableRowGroup;
     }
@@ -319,9 +502,53 @@ public class Productos extends AbstractPageBean {
         this.tableRowGroup = tableRowGroup;
     }
 
-    public String botonAgregar1_action() {
-        return "producto_add";
+//    public String botonAgregar1_action() {
+//        return "producto_add";
+//    }
+    public String botonInsertar1_action() {
+        viewForm = true;
+        inserting = true;
+        return null;
     }
 
+    public String btnAceptar_action() {
+        producto = new Producto();
+        producto.setCantidad(Integer.parseInt(txtCantidad.getText().toString()));
+        producto.setDescripcion(txtDescripcion.getText().toString());
+        producto.setNombre(txtNombre.getText().toString());
+        producto.setPrecio(Integer.parseInt(txtPrecio.getText().toString()));
+        producto.setProveedor(proveedorFacade.find(dropDownProveedor.getSelected()));
+        try {
+            productoDao.insert(producto);
+            viewForm = false;
+            info("El registro se ha insertado con exito!");
+        } catch (Exception e) {
+            error("Ha ocurrido un error! " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String btnUpdate_action() {
+        producto = getSessionBean1().getProducto();
+        producto.setCantidad(Integer.parseInt(txtCantidad.getText().toString()));
+        producto.setDescripcion(txtDescripcion.getText().toString());
+        producto.setNombre(txtNombre.getText().toString());
+        producto.setPrecio(Integer.parseInt(txtPrecio.getText().toString()));
+        producto.setProveedor(proveedorFacade.find(dropDownProveedor.getSelected()));
+        try {
+            productoDao.update(producto);
+            viewForm = false;
+            info("El registro se ha actualizado con exito!");
+        } catch (Exception e) {
+            error("Ha ocurrido un error! " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String btnCancelar_action() {
+        return null;
+    }
 }
 

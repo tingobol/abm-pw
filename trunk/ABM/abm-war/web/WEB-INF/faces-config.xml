@@ -31,4 +31,63 @@
         <managed-bean-class>abmwar.RequestBean1</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ProductoForm</managed-bean-name>
+        <managed-bean-class>abmwar.ProductoForm</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <from-view-id>/Productos.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>producto_add</from-outcome>
+            <to-view-id>/ProductoForm.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>producto_update</from-outcome>
+            <to-view-id>/ProductoForm.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/ProductoForm.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/Productos.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>failed</from-outcome>
+            <to-view-id>/Error.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>volver</from-outcome>
+            <to-view-id>/Productos.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>Error</managed-bean-name>
+        <managed-bean-class>abmwar.Error</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Proveedores</managed-bean-name>
+        <managed-bean-class>abmwar.Proveedores</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Clientes</managed-bean-name>
+        <managed-bean-class>abmwar.Clientes</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Compras</managed-bean-name>
+        <managed-bean-class>abmwar.Compras</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Ventas</managed-bean-name>
+        <managed-bean-class>abmwar.Ventas</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>
+
+
+
