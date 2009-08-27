@@ -16,7 +16,7 @@
                     <webuijsf:form id="form1">
                         <h:panelGrid id="gridPanelContent1" style="left: 0px; top: 48px; position: absolute" styleClass="panelContent">
                             <webuijsf:table augmentTitle="false" id="table1" paginateButton="true" paginationControls="true" style="width: 450px"
-                                title="PRODUCTOS" width="450">
+                                title="CLIENTES" width="450">
                                 <f:facet name="actionsTop">
                                     <webuijsf:panelGroup id="groupPanel1">
                                         <webuijsf:label id="lblFiltro1" text="Busqueda"/>
@@ -27,11 +27,14 @@
                                     </webuijsf:panelGroup>
                                 </f:facet>
                                 <webuijsf:tableRowGroup id="tableRowGroup" rows="5" selected="#{Clientes.selectedState}" sourceData="#{Clientes.listaClientes}" sourceVar="currentRow">
-                                    <webuijsf:tableColumn headerText="Código" id="tableColumn1" sort="codigo">
-                                        <webuijsf:staticText id="staticText1" text="#{currentRow.value['codigo']}"/>
+                                    <webuijsf:tableColumn headerText="Código" id="tableColumn1" sort="codigo" binding="#{Clientes.tableRowGroup}">
+                                        <webuijsf:staticText id="staticText1" text="#{currentRow.value['idcliente']}"/>
                                     </webuijsf:tableColumn>
                                     <webuijsf:tableColumn headerText="Nombre" id="tableColumn2" sort="nombre">
                                         <webuijsf:staticText id="staticText2" text="#{currentRow.value['nombre']}"/>
+                                    </webuijsf:tableColumn>
+                                    <webuijsf:tableColumn headerText="Apellido" id="tableColumn3" sort="apellido">
+                                        <webuijsf:staticText id="staticText3" text="#{currentRow.value['apellido']}"/>
                                     </webuijsf:tableColumn>
                                     <webuijsf:tableColumn id="tableColumn5" sort="column3">
                                         <webuijsf:button actionExpression="#{Clientes.botonModificar_action}" id="botonModificar1" text="Modificar"/>
@@ -44,7 +47,7 @@
                             <webuijsf:button actionExpression="#{Clientes.botonInsertar1_action}" id="botonInsertar1" text="Insertar"/>
                         </h:panelGrid>
                         <webuijsf:messageGroup id="messageGroup1" style="left: 0px; top: 0px; position: absolute" title="SCS"/>
-                        <h:panelGrid binding="#{Clientes.gridPanelDown}" id="gridPanelDown" style="left: 24px; top: 192px; position: absolute">
+                        <h:panelGrid binding="#{Clientes.gridPanelDown}" id="gridPanelDown" style="left: 24px; top: 240px; position: absolute">
                             <h:panelGrid binding="#{Clientes.gridPanelForm}" columns="2" id="gridPanelForm">
                                 <webuijsf:label id="label1" text="Nombre : "/>
                                 <webuijsf:textField binding="#{Clientes.txtNombre}" id="txtNombre"/>
