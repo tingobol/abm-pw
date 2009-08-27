@@ -26,4 +26,5 @@ public interface ProveedorFacadeLocal {
 
     List<Proveedor> findAll();
 
+    public List<Proveedor> getListaProveedores(String condicion);
 }

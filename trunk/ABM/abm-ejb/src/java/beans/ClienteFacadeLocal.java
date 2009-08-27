@@ -26,4 +26,5 @@ public interface ClienteFacadeLocal {
 
     List<Cliente> findAll();
 
+    List<Cliente> getListaClientes(String condicion);
 }
