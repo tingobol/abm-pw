@@ -26,4 +26,5 @@ public interface CompraFacadeLocal {
 
     List<Compra> findAll();
 
+    List<Compra> getListaCompras(String condicion);
 }
