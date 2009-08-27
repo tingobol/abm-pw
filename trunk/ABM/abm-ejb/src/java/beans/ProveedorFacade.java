@@ -41,6 +41,6 @@ public class ProveedorFacade implements ProveedorFacadeLocal {
     }
 
     public List<Proveedor> getListaProveedores(String condicion) {
-        return em.createNamedQuery("select p from Proveedor p " + condicion + " order by p.codigo").getResultList();
+        return em.createQuery("select p from Proveedor p " + condicion + " order by p.codigo").getResultList();
     }
 }
