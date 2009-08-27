@@ -37,7 +37,11 @@ public class ClienteFacade implements ClienteFacadeLocal {
     }
 
     public List<Cliente> findAll() {
-        return em.createQuery("select object(o) from Cliente as o").getResultList();
+        return em.createQuery("select c from Cliente c").getResultList();
+    }
+
+    public List<Cliente> getListaClientes(String condicion) {
+        return em.createQuery("select c from Cliente c " + condicion + " order by c.codigo").getResultList();
     }
 
 }

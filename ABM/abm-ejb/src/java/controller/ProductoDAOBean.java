@@ -116,6 +116,7 @@ public class ProductoDAOBean implements ProductoDAOLocal{
             // recuperamos la lista
             retorno = q.getResultList();
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         }finally{
             return retorno;
